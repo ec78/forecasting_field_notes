@@ -38,6 +38,10 @@ Medium). See [topics/README.md](topics/README.md) for the full mechanics.
 - **One numbered subfolder per post**, under both `notebooks/` and
   `results/`: `notebooks/<NN>-<slug>/`, `results/<NN>-<slug>/{figures,metrics}/`.
   `NN` is zero-padded and increments across the whole series, not per topic.
+- **Scope is forecasting.** `posts/background/` holds assets for earlier,
+  pre-series forecasting posts and isn't numbered. Posts on other topics
+  (GAUSS libraries, econometrics, data cleaning) belong in the separate
+  `ec78/medium-posts` repo, not here.
 - **Every notebook gets a `SMALL_SCALE` toggle** near the top, cutting
   history/origins/step so it runs in a few minutes for development and CI,
   with a comment on what to flip for the full-scale numbers actually used in

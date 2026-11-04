@@ -1,9 +1,15 @@
-# selective-hybrid-forecasting
+# forecasting_field_notes
 
 A working repo for an ongoing Medium series on emerging time-series
 forecasting methods: small, conceptual demonstrations built so that each
 post's claims are checked against a shared, honest evaluation design rather
 than just asserted.
+
+Read the posts on [Medium (@eclow)](https://medium.com/@eclow). Earlier
+forecasting posts that led into this series are indexed in
+[posts/background/](posts/background/); posts on other topics (econometrics,
+GAUSS libraries, data cleaning) live in
+[ec78/medium-posts](https://github.com/ec78/medium-posts).
 
 ## How this repo works
 
@@ -19,6 +25,8 @@ than just asserted.
   a rendered equation image), written once a notebook's results are in. Not
   published from here — Eric publishes the finished draft to Medium; the
   file stays as a historical record afterward.
+  [`posts/background/`](posts/background/) holds image assets for the
+  earlier, pre-series forecasting posts.
 - **[`src/`](src/)** — the shared toolbox (data loaders, the rolling-origin
   evaluation harness, model wrappers) reused across posts.
 - **[`CLAUDE.md`](CLAUDE.md)** — repo conventions and the writing-style guide
@@ -44,6 +52,8 @@ new posts rather than rebuilding it per-notebook.
 ## Posts
 
 ### 01 — Selective hybrid forecasting
+
+Published: [The Future of Forecasting Is Selectively Hybrid](https://medium.com/@eclow/the-future-of-forecasting-is-selectively-hybrid-94a4baab500c)
 
 *When is a pretrained model worth using on its own, versus as one ingredient
 in something more selective?* Companion to two earlier posts:
@@ -207,7 +217,7 @@ same shape: question, notebook table, one paragraph per demo, references.)*
 ## Repository structure
 
 ```
-selective-hybrid-forecasting/
+forecasting_field_notes/
 ├── literature/                candidate papers — see literature/index.md
 ├── topics/
 │   ├── README.md              how a week becomes a blog topic
@@ -218,6 +228,7 @@ selective-hybrid-forecasting/
 │   ├── README.md
 │   └── raw/                   electricity_ciso.csv, spy.csv (+ metadata)
 ├── posts/                      prose drafts, one <NN>-<slug>.md per post
+│   └── background/             assets for earlier, pre-series forecasting posts
 ├── notebooks/
 │   ├── 01-selective-hybrid-forecasting/   one subfolder per post
 │   ├── 02-excitation-for-control/

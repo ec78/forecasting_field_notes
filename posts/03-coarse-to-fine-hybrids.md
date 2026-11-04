@@ -150,7 +150,7 @@ matter more than checking the result.
 ---
 
 *Code, the full sweep, and both refiners are in
-[`notebooks/03-coarse-to-fine-hybrids/`](https://github.com/ec78/slective-hybrid-forecasting/tree/main/notebooks/03-coarse-to-fine-hybrids)
-of the [companion repo](https://github.com/ec78/slective-hybrid-forecasting). The paper
+[`notebooks/03-coarse-to-fine-hybrids/`](https://github.com/ec78/forecasting_field_notes/tree/main/notebooks/03-coarse-to-fine-hybrids)
+of the [companion repo](https://github.com/ec78/forecasting_field_notes). The paper
 that prompted this is Le, Tran, Luo, Aickelin, Phung, & Le (2026), "Efficient Test-Time
 Scaling for LLM-based Time Series Forecasting," KDD 2026.*

@@ -1,5 +1,5 @@
 [project]
-name = "selective-hybrid-forecasting"
+name = "forecasting-field-notes"
 version = "0.1.0"
 description = "Small conceptual demonstrations of when pretrained and classical forecasting methods are worth combining."
 readme = "README.md"

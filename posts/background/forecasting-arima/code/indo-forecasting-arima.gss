@@ -1,0 +1,91 @@
+/*
+** INDPRO
+** Complete ARIMA workflow: load data, fit, examine, forecast, plot.
+**
+** Demonstrates:
+**   1. Auto ARIMA model selection
+**   2. Print and inspect results
+**   3. Forecast with confidence intervals
+**   4. Residual diagnostics
+**   5. Plotting
+*/
+new;
+library timeseries;
+
+// Load data from FRED
+FRED_API_KEY = "7a756a099f64c52f4657b4accc942137";
+
+// =========================================================================
+// Step 1: Load data
+// =========================================================================
+
+cpi_data = fred_load("CPIAUCSL", "frequency", "m");
+ind_prod = fred_load("INDPRO", "frequency", "m");
+unemp = fred_load("UNRATE");
+
+
+plotXY(unemp, "UNRATE~date");
+end;
+
+
+// =========================================================================
+// Step 2: Auto ARIMA automatic order selection
+// =========================================================================
+
+// Default settings: stepwise search, AICc criterion
+result = arimaFit(nile);
+
+// Print full summary: model, coefficients, diagnostics
+arimaResults(result);
+
+// =========================================================================
+// Step 3: Examine coefficients
+// =========================================================================
+
+print "";
+print "Coefficient table as dataframe:";
+df = arimaCoefTable(result);
+print df;
+
+// =========================================================================
+// Step 4: Residual diagnostics
+// =========================================================================
+
+struct arimaDiagResult diag_res;
+diag_res = arimaDiagnostics(result);
+
+print "";
+sprintf("Ljung-Box Q(%d) = %8.3f", diag_res.lb_lags, diag_res.lb_stat);
+sprintf("  p-value = %6.4f", diag_res.lb_pval);
+if diag_res.lb_pval > 0.05;
+    print "  -> No significant autocorrelation in residuals (good)";
+else;
+    print "  -> WARNING: Residual autocorrelation detected";
+endif;
+
+// =========================================================================
+// Step 5: Forecast
+// =========================================================================
+
+fc = arimaForecast(result, 10);
+
+print "";
+print "10-step ahead forecast:";
+format /rd 8,1;
+for i (1, 5, 1);
+    print "  h=" ntos(i) ": " fc.forecasts[i] " [" fc.lower[i] ", " fc.upper[i] "]";
+endfor;
+
+// =========================================================================
+// Step 6: Plot
+// =========================================================================
+
+// Forecast plot: historical + forecast with CI band
+arimaPlotForecast(result, fc);
+
+// Residual diagnostics: time plot, ACF, histogram
+plotOpenWindow();
+arimaPlotResiduals(result);
+
+end;
+

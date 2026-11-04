@@ -243,8 +243,8 @@ hard way instead.
 ---
 
 *Code, the full sweep, and the toy system are in
-[`notebooks/02-excitation-for-control/`](https://github.com/ec78/slective-hybrid-forecasting/tree/main/notebooks/02-excitation-for-control)
-of the [companion repo](https://github.com/ec78/slective-hybrid-forecasting). The paper
+[`notebooks/02-excitation-for-control/`](https://github.com/ec78/forecasting_field_notes/tree/main/notebooks/02-excitation-for-control)
+of the [companion repo](https://github.com/ec78/forecasting_field_notes). The paper
 that prompted this is Amria, Hoffmann, Bordne, Rothenhäuser, Frison, Walnum, Gros, &
 Bödecker (2026), "Time-series Foundation Models for Predictive Control: The Role of
 Excitation," NeurIPS 2026 Workshop: TS-LIMITS.*
