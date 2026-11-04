@@ -172,6 +172,35 @@ References:
 - Le, X.-M., Tran, M.-T., Luo, L., Aickelin, U., Phung, D., & Le, T. (2026). *Efficient
   Test-Time Scaling for LLM-based Time Series Forecasting.* KDD 2026.
 
+### 04 — Does an online corrector earn its place once you wait for the labels?
+
+*If a small model watches a frozen forecaster's errors as they arrive and corrects its next
+forecast, does that beat the frozen model — once you respect that an h-step-ahead forecast's
+error only exists h steps later?* Inspired by two papers that pull in opposite directions:
+ORCA (Dai et al., NeurIPS 2026), an online residual adapter for frozen, black-box foundation
+models that reports ~6% average gains, and Training on the Future (Fentazi, Ameur & Ksentini,
+2026), an audit finding that under causal label delay most published test-time adapters
+gain little and a closed-form RLS-Bank sets a bar they rarely clear. Neither tests ORCA
+against that bar; this does, in miniature, correcting Chronos-2's *own* errors on CISO and
+SPY — an ORCA-style closed-form ridge adapter (with and without its error-gated router), the
+RLS-Bank rebuilt from the paper, and Post 01's residual memory run online — with label delay
+(leaky reference / minimum causal / late) as an explicit axis.
+
+| Notebook | Question |
+|---|---|
+| [01_online_residual_correction.ipynb](notebooks/04-online-residual-correction/01_online_residual_correction.ipynb) | Does an online residual corrector on frozen Chronos-2 beat the frozen model under causal label delay — and does ORCA's adapter beat a no-tuning closed-form RLS-Bank? |
+
+**Result:** *(full-scale run in progress — filled in from
+`results/04-online-residual-correction/metrics/*_fullscale.csv`)*
+
+References:
+
+- Dai, X., Liu, Y., Xia, H., Hu, Y., Dong, Z., Yang, J.-M., & Xu, Q. (2026). *Learning the
+  Context of Errors: Black-Box Online Adaptation of Time Series Foundation Models.*
+  NeurIPS 2026. arXiv:2606.14222.
+- Fentazi, M. R., Ameur, M., & Ksentini, A. (2026). *Training on the Future: A Delay-Aware
+  Audit of Test-Time Adaptation for Time-Series Forecasting.* arXiv:2610.12232.
+
 *(Future posts get their own `### NN — Title` section here, following the
 same shape: question, notebook table, one paragraph per demo, references.)*
 
@@ -192,7 +221,8 @@ selective-hybrid-forecasting/
 ├── notebooks/
 │   ├── 01-selective-hybrid-forecasting/   one subfolder per post
 │   ├── 02-excitation-for-control/
-│   └── 03-coarse-to-fine-hybrids/
+│   ├── 03-coarse-to-fine-hybrids/
+│   └── 04-online-residual-correction/
 ├── src/
 │   ├── data.py                 loaders + train/val/test split
 │   ├── evaluation.py            metrics + rolling-origin harness
@@ -200,6 +230,7 @@ selective-hybrid-forecasting/
 │   ├── residual_memory.py      causal nearest-neighbor residual retrieval
 │   ├── control.py               synthetic controllable system + response-gain metric
 │   ├── coarse_to_fine.py        cheap shape model + pluggable residual refiner
+│   ├── online_correction.py     delay-aware replay + online residual correctors
 │   └── dataimport.py            optional: refresh the raw CSVs
 ├── tests/                     unit tests for the metrics and causal retrieval logic
 ├── results/
@@ -209,7 +240,10 @@ selective-hybrid-forecasting/
 │   ├── 02-excitation-for-control/
 │   │   ├── figures/
 │   │   └── metrics/
-│   └── 03-coarse-to-fine-hybrids/
+│   ├── 03-coarse-to-fine-hybrids/
+│   │   ├── figures/
+│   │   └── metrics/
+│   └── 04-online-residual-correction/
 │       ├── figures/
 │       └── metrics/
 └── CLAUDE.md                  repo conventions + writing-style guide
@@ -229,4 +263,5 @@ Run the test suite with `pytest`. Chronos-2 (`amazon/chronos-2`) downloads
 from Hugging Face on first use and runs on CPU unless a CUDA GPU is
 available; expect zero-shot inference to be the slowest part of Post 01's
 Demo 1, the Chronos branch of Demo 2, all of Post 02, and the Chronos-refiner
-branch of Post 03.
+branch of Post 03, and the base stream of Post 04 (one Chronos-2 call per
+time step — the slowest notebook in the repo at full scale).

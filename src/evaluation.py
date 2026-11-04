@@ -220,3 +220,36 @@ def summarize(results, group_cols=("model", "horizon"), include_direction=True):
         summaries.append(row)
 
     return pd.DataFrame(summaries).sort_values(group_cols).reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Paired significance
+# ---------------------------------------------------------------------------
+
+def paired_block_bootstrap(loss_a, loss_b, block_length, n_boot=500, ci=0.95, seed=0):
+    """Circular moving-block bootstrap interval for ``mean(loss_a - loss_b)``.
+
+    For two models scored on the same, consecutive origins. Overlapping
+    multi-step forecasts make per-origin losses autocorrelated, so resampling
+    single origins would overstate certainty; resampling blocks of
+    ``block_length`` consecutive origins (wrapping around the end) keeps that
+    dependence. Negative ``mean_diff`` means model A had lower loss.
+    """
+    diff = np.asarray(loss_a, dtype=float) - np.asarray(loss_b, dtype=float)
+    n = len(diff)
+    block_length = max(1, min(int(block_length), n))
+    n_blocks = int(np.ceil(n / block_length))
+
+    rng = np.random.default_rng(seed)
+    starts = rng.integers(0, n, size=(n_boot, n_blocks))
+    idx = (starts[:, :, None] + np.arange(block_length)) % n
+    boot_means = diff[idx.reshape(n_boot, -1)[:, :n]].mean(axis=1)
+
+    tail = (1 - ci) / 2
+    low, high = np.quantile(boot_means, [tail, 1 - tail])
+    return {
+        "mean_diff": float(diff.mean()),
+        "ci_low": float(low),
+        "ci_high": float(high),
+        "significant": bool(low > 0 or high < 0),
+    }
