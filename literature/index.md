@@ -27,3 +27,4 @@ of naming a local file.
 **Status values:** `unread` / `reading` / `used-in-<post-slug>` / `skipped`
 (skipped = read, not a fit — leave a one-line reason in Notes rather than
 deleting the row).
+| [arXiv 2607.20002](https://arxiv.org/abs/2607.20002) | Post-Training in Time Series Foundation Models: A Unifying Framework | arXiv, Jul 2026 (author list unverified) | 2026-11-09 | unread | Survey: five post-training categories by locus of intervention. Backs the conformal/interval-calibration backlog row. Abstract from search snippets only. |
