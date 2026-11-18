@@ -1,0 +1,6 @@
+id,registered prediction,what happened
+P1,"No cell in C meets the SMI on the blind window, and SPA does not reject.",blind window not opened
+P2,The detection limit at blind size is large (oracle needs delta >= 0.2 or more).,h=1: > 0.3; h=5: > 0.3
+P3,"On the seen window at least one of the 9 cells 'wins' pairwise, but the 9-cell SPA does not reject.","pairwise wins = 1, SPA p = 0.159"
+P4,Post 04's h = 20 advantage over naive mostly disappears against drift.,"R0/drift loss ratio at h=20 = 0.993 [0.945, 1.038]"
+P5,Every cell and no-change have price-level corr > 0.99; no-change highest or tied.,"seen: h=1: min corr 0.9949, highest = Ridge; h=5: min corr 0.9809, highest = Chronos-2 R2 vol-std; h=20: min corr 0.9383, highest = Chronos-2 R2 vol-std"

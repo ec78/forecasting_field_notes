@@ -4,6 +4,7 @@ The checked-in CSVs are sufficient to run every notebook, so this script is
 only needed to pull more recent history.
 
     python -m src.dataimport --dataset spy
+    python -m src.dataimport --dataset spy --out spy_blind_2026-11-18.csv
     python -m src.dataimport --dataset electricity --balancing-authority CISO
 """
 
@@ -25,8 +26,13 @@ def _save(data, metadata, csv_filename, metadata_filename):
     pd.Series(metadata).to_json(RAW_DATA_DIR / metadata_filename, indent=2)
 
 
-def fetch_spy():
-    """Download SPY adjusted-close history from Yahoo Finance."""
+def fetch_spy(csv_filename="spy.csv"):
+    """Download SPY adjusted-close history from Yahoo Finance.
+
+    ``csv_filename`` lets a refresh go to a new file instead of overwriting
+    ``spy.csv``, which earlier posts' results depend on (Post 05 fetches its
+    blind window this way). The metadata file is named after it.
+    """
     import yfinance as yf
 
     data = yf.download("SPY", period="max", auto_adjust=True, progress=False)
@@ -48,7 +54,8 @@ def fetch_spy():
         "start_date": str(data.index.min().date()),
         "end_date": str(data.index.max().date()),
     }
-    _save(data, metadata, "spy.csv", "spy_metadata.json")
+    metadata_filename = csv_filename.removesuffix(".csv") + "_metadata.json"
+    _save(data, metadata, csv_filename, metadata_filename)
     return data
 
 
@@ -124,9 +131,11 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", choices=["spy", "electricity"], required=True)
     parser.add_argument("--balancing-authority", default="CISO")
     parser.add_argument("--start-year", type=int, default=2019)
+    parser.add_argument("--out", default=None,
+                        help="SPY only: CSV filename under data/raw/ (default spy.csv).")
     args = parser.parse_args()
 
     if args.dataset == "spy":
-        fetch_spy()
+        fetch_spy(args.out or "spy.csv")
     else:
         fetch_electricity(args.balancing_authority, args.start_year)

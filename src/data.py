@@ -26,9 +26,9 @@ def load_electricity(balancing_authority="CISO"):
     return _load_csv(f"electricity_{balancing_authority.lower()}.csv")
 
 
-def load_spy():
-    """Daily SPY adjusted close."""
-    return _load_csv("spy.csv")
+def load_spy(filename="spy.csv"):
+    """Daily SPY adjusted close (``filename`` selects a refreshed copy, e.g. Post 05's blind file)."""
+    return _load_csv(filename)
 
 
 def train_val_test_split(series, val_size, test_size):

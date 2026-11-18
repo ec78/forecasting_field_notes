@@ -1,0 +1,3 @@
+size,n_eval,horizon,oracle_detection_limit_delta
+blind,65,1,> 0.3
+blind,65,5,> 0.3

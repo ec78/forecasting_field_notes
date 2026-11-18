@@ -16,6 +16,7 @@ dependencies = [
     "matplotlib>=3.8",
     "requests>=2.31",
     "python-dotenv>=1.0",
+    "arch>=7.0",
 ]
 
 [project.optional-dependencies]

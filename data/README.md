@@ -34,3 +34,16 @@ python -m src.dataimport --dataset spy
 ```
 
 This is optional — the checked-in CSVs are sufficient to run every notebook.
+
+**Don't refresh `spy.csv` in place.** Posts 01 and 04 were scored on it as checked in,
+and Post 05 treats its last close, 2026-08-17, as the boundary between seen and blind
+data. A newer SPY pull goes to its own file instead:
+
+```bash
+python -m src.dataimport --dataset spy --out spy_blind_<fetch-date>.csv
+```
+
+That writes `data/raw/spy_blind_<fetch-date>.csv` plus matching metadata, and
+`src.data.load_spy("spy_blind_<fetch-date>.csv")` loads it. Post 05's blind window is
+fetched this way, once, after its code freeze (see
+`notebooks/05-declare-the-null/PREREGISTRATION.md`).

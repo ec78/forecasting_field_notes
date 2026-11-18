@@ -187,7 +187,9 @@ quantile.
      (decoders, the SPA wrapper with its sign test, the `dataimport --out`
      option).
    - Run the seen stage and the §7 detection limits in full.
-   - Commit and push. SHA: `________`.
+   - Commit and push: 2026-11-18, the commit titled "Code freeze for Post 05". It
+     includes the full-scale seen-stage and detection-limit outputs
+     (`results/05-declare-the-null/metrics/*_fullscale.csv`).
 3. **Open the blind window once.**
    - Fetch to the new file (see §2), run the blind stage once, and commit the
      raw outputs unedited. SHA: `________`.
@@ -206,3 +208,42 @@ quantile.
 
 *(Dated entries only, written after the freeze. Each entry says whether the
 blind window had been opened at the time.)*
+
+**A1 — 2026-11-18, before the code freeze, blind window not opened. SPA
+statistic floored at zero, as Hansen (2005) defines it.**
+- `arch` 9.0's `SPA` does not floor the statistic. In a unit test where every
+  cell clearly loses to the benchmark, its "consistent" p-value was 0.49, not
+  the p = 1 that Hansen's `T = max(max_k t_k, 0)` with `p = P(T* ≥ T)` gives.
+  This is the same convention behind Upadhyay's "p = 1.000 (T = 0)".
+- `src/null_testing.spa_test` therefore reports Hansen's p-values: 1 when no
+  cell has a positive mean `d`, and `arch`'s otherwise. `arch`'s unfloored
+  values are kept alongside as `p_*_arch_raw`.
+- The decision rule in §5 uses the floored consistent p-value.
+- **Effect:** this can only *raise* p, and only when no cell beats no-change
+  on average, so it can't manufacture a "skill" verdict.
+
+**A2 — 2026-11-18, before the code freeze, blind window not opened. How the
+planted series in §7 are built.**
+- §7 says to take the |daily log return| sequence "from the validation
+  window". That window holds about 500 returns, which is too short for a
+  512-day context plus a ridge fit plus the evaluation origins.
+- Each planted series instead uses the last `1,000 + 250 + n + h_max` real
+  |returns| ending at the validation end (2024-07-19). That is the validation
+  window plus the immediately preceding Fit-window days, all of them
+  pre-seen-window data.
+- **The ridge, on each planted series**, is fit on the first 1,000 returns,
+  with α picked from the registered grid by MAE on the next 250, then frozen.
+  The evaluation origins follow.
+- **"Detects" means meets the SMI**, per horizon: h = 1 and 5 at blind size
+  (65 origins), and h = 1, 5 and 20 at seen size (500 origins). Chronos-2 R1
+  runs at blind size only.
+- **Effect:** these details were unspecified, not changed; nothing in §§3–6 is
+  affected.
+
+**Note (not an amendment) — 2026-11-18, blind window not opened.**
+- In the smoke run, validation picked α = 1e4, the top of the registered grid,
+  at every horizon. The real-data ridge is therefore shrunk to roughly a
+  constant drift forecast.
+- The grid is left as registered and this is reported in the write-up. Widening
+  it now, having seen that, would be the kind of after-the-fact tuning the plan
+  exists to prevent.

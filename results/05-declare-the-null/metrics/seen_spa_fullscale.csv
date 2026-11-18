@@ -1,0 +1,2 @@
+n_origins,n_cells,block_size,reps,best_cell,best_mean_d,statistic_is_zero,p_consistent,p_lower,p_upper,p_consistent_arch_raw,p_lower_arch_raw,p_upper_arch_raw
+500,9,20,1000,Chronos-2 R2 vol-std | h=20,0.004265918017685248,False,0.159,0.159,0.232,0.159,0.159,0.232

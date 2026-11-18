@@ -211,6 +211,49 @@ References:
 - Fentazi, M. R., Ameur, M., & Ksentini, A. (2026). *Training on the Future: A Delay-Aware
   Audit of Test-Time Adaptation for Time-Series Forecasting.* arXiv:2610.12232.
 
+### 05 — Declare the null before you look
+
+*On daily SPY, does frozen, zero-shot Chronos-2 forecast h-day log returns better than a
+no-change forecast, once the loss, the family of comparisons and the multiplicity
+correction are fixed before the data is seen?* The prompt was a leftover from Post 04:
+there, frozen Chronos-2 beat naive at h = 20 on SPY by about 12%, with a pairwise
+interval excluding zero. That was one of 30 uncorrected comparisons. This post is a
+small daily-SPY analogue of Upadhyay (2026), a preregistered evaluation in which no
+combination of five TSFMs, input representations and horizons beat no-change on
+intraday index futures.
+
+The analysis plan was frozen and pushed *before* any of this was run:
+[PREREGISTRATION.md](notebooks/05-declare-the-null/PREREGISTRATION.md). Dated
+amendments are recorded in its §10.
+
+| Notebook | Question |
+|---|---|
+| [01_declare_the_null.ipynb](notebooks/05-declare-the-null/01_declare_the_null.ipynb) | Does any Chronos-2 input (prices, log returns, volatility-standardised returns) beat no-change by the preregistered margin, and survive Hansen's SPA test, on SPY data nobody had seen when the plan was written? |
+
+The notebook has three stages:
+
+- **The seen window** (Post 04's 500 test origins) is exploratory. It re-examines the
+  h = 20 "win" against a drift control, and shows how pairwise "wins" compare with SPA,
+  how price-level correlation flatters every forecaster, and directional accuracy
+  against the up-day base rate.
+- **The detection-limit check** plants sign persistence into real SPY volatility, to show
+  what a test of this size could detect at all.
+- **The blind window** (every close after 2026-08-17) is the confirmatory test, opened
+  once.
+
+**Result:** *(pending: the blind window opens once, after the code freeze, per
+PREREGISTRATION §9)*
+
+References:
+
+- Upadhyay, R. (2026). *Do Time-Series Foundation Models Forecast Index-Futures Returns?
+  A Preregistered Evaluation of Models, Metrics, and Input Representations.*
+  arXiv:2611.12141.
+- Wan, S., Ma, M., et al. (2026). *Forecast Collapse in Time-Series Foundation Models.*
+  arXiv:2608.14106.
+- Hansen, P. R. (2005). A test for superior predictive ability. *Journal of Business &
+  Economic Statistics*, 23(4), 365–380.
+
 *(Future posts get their own `### NN — Title` section here, following the
 same shape: question, notebook table, one paragraph per demo, references.)*
 
@@ -233,7 +276,8 @@ forecasting_field_notes/
 │   ├── 01-selective-hybrid-forecasting/   one subfolder per post
 │   ├── 02-excitation-for-control/
 │   ├── 03-coarse-to-fine-hybrids/
-│   └── 04-online-residual-correction/
+│   ├── 04-online-residual-correction/
+│   └── 05-declare-the-null/            (+ PREREGISTRATION.md)
 ├── src/
 │   ├── data.py                 loaders + train/val/test split
 │   ├── evaluation.py            metrics + rolling-origin harness
@@ -242,6 +286,7 @@ forecasting_field_notes/
 │   ├── control.py               synthetic controllable system + response-gain metric
 │   ├── coarse_to_fine.py        cheap shape model + pluggable residual refiner
 │   ├── online_correction.py     delay-aware replay + online residual correctors
+│   ├── null_testing.py          return decoders, MAE ratio/SMI, SPA, planted-signal power
 │   └── dataimport.py            optional: refresh the raw CSVs
 ├── tests/                     unit tests for the metrics and causal retrieval logic
 ├── results/
@@ -254,7 +299,10 @@ forecasting_field_notes/
 │   ├── 03-coarse-to-fine-hybrids/
 │   │   ├── figures/
 │   │   └── metrics/
-│   └── 04-online-residual-correction/
+│   ├── 04-online-residual-correction/
+│   │   ├── figures/
+│   │   └── metrics/
+│   └── 05-declare-the-null/
 │       ├── figures/
 │       └── metrics/
 └── CLAUDE.md                  repo conventions + writing-style guide
